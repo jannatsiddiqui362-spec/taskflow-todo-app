@@ -1,0 +1,603 @@
+/* ============================================================
+   TaskFlow — style.css
+   ============================================================
+   Table of Contents
+   1. CSS Custom Properties (Theme Variables)
+   2. Reset & Base
+   3. Header
+   4. Main Layout
+   5. Stats Cards
+   6. Input Card
+   7. Toolbar (Filter + Clear)
+   8. Task List & Empty State
+   9. Task Card
+   10. Inline Edit
+   11. Confirm Dialog
+   12. Animations
+   13. Responsive (Mobile)
+   ============================================================ */
+
+
+/* ============================================================
+   1. CSS CUSTOM PROPERTIES (Light Theme — default)
+   ============================================================ */
+:root {
+  --bg:            #f0f4ff;
+  --surface:       #ffffff;
+  --surface2:      #f8faff;
+  --border:        #e2e8f0;
+  --primary:       #4f46e5;
+  --primary-hover: #4338ca;
+  --primary-light: #eef2ff;
+  --danger:        #ef4444;
+  --danger-light:  #fef2f2;
+  --success:       #10b981;
+  --text:          #1e293b;
+  --text-muted:    #64748b;
+  --text-light:    #94a3b8;
+  --shadow:        0 4px 24px rgba(79, 70, 229, 0.08);
+  --shadow-sm:     0 2px 8px rgba(0, 0, 0, 0.06);
+  --radius:        14px;
+  --radius-sm:     8px;
+  --transition:    0.2s ease;
+}
+
+/* Dark Mode — toggled via class on <html> */
+html.dark {
+  --bg:            #0f172a;
+  --surface:       #1e293b;
+  --surface2:      #162032;
+  --border:        #334155;
+  --primary:       #818cf8;
+  --primary-hover: #a5b4fc;
+  --primary-light: #1e1b4b;
+  --danger:        #f87171;
+  --danger-light:  #2d1515;
+  --success:       #34d399;
+  --text:          #f1f5f9;
+  --text-muted:    #94a3b8;
+  --text-light:    #475569;
+  --shadow:        0 4px 24px rgba(0, 0, 0, 0.3);
+  --shadow-sm:     0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+/* ============================================================
+   2. RESET & BASE
+   ============================================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  transition: background var(--transition), color var(--transition);
+}
+
+
+/* ============================================================
+   3. HEADER
+   ============================================================ */
+header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: -0.5px;
+}
+
+.logo span {
+  color: var(--text);
+  font-weight: 400;
+}
+
+#themeToggle {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  padding: 6px 14px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: all var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+#themeToggle:hover {
+  background: var(--primary-light);
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.theme-icon { font-size: 1rem; }
+
+
+/* ============================================================
+   4. MAIN LAYOUT
+   ============================================================ */
+main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 16px 60px;
+}
+
+
+/* ============================================================
+   5. STATS CARDS
+   ============================================================ */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.stat-num {
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.stat-card.total     .stat-num { color: var(--primary); }
+.stat-card.completed .stat-num { color: var(--success); }
+.stat-card.remaining .stat-num { color: var(--danger);  }
+
+
+/* ============================================================
+   6. INPUT CARD
+   ============================================================ */
+.input-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.input-row {
+  display: flex;
+  gap: 10px;
+}
+
+#taskInput {
+  flex: 1;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  color: var(--text);
+  background: var(--surface2);
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+#taskInput::placeholder { color: var(--text-light); }
+
+#taskInput:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+}
+
+html.dark #taskInput:focus {
+  box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.15);
+}
+
+#addBtn {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 12px 22px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+  white-space: nowrap;
+}
+
+#addBtn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+
+#addBtn:active { transform: scale(0.97); }
+
+
+/* ============================================================
+   7. TOOLBAR (Filter + Clear All)
+   ============================================================ */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.filter-group { display: flex; gap: 6px; }
+
+.filter-btn {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 50px;
+  padding: 7px 16px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.filter-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.filter-btn.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+#clearAllBtn {
+  background: var(--danger-light);
+  border: 1.5px solid transparent;
+  border-radius: 50px;
+  padding: 7px 16px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--danger);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+#clearAllBtn:hover {
+  background: var(--danger);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+
+/* ============================================================
+   8. TASK LIST & EMPTY STATE
+   ============================================================ */
+#taskList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.empty-state {
+  background: var(--surface);
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 48px 24px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.empty-icon {
+  font-size: 2.8rem;
+  margin-bottom: 12px;
+  opacity: 0.5;
+}
+
+.empty-state h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--text);
+}
+
+.empty-state p { font-size: 0.87rem; }
+
+
+/* ============================================================
+   9. TASK CARD
+   ============================================================ */
+.task-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition), box-shadow var(--transition),
+              opacity var(--transition), border-color var(--transition);
+  animation: slideIn 0.2s ease;
+}
+
+.task-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+  border-color: var(--primary);
+}
+
+/* Completed card */
+.task-card.done { opacity: 0.6; border-color: var(--border); }
+.task-card.done:hover { border-color: var(--border); }
+
+/* Custom checkbox */
+.check-wrap { flex-shrink: 0; padding-top: 2px; }
+
+.task-check {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 2px solid var(--border);
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  background: var(--surface2);
+  transition: all var(--transition);
+  position: relative;
+}
+
+.task-check:hover {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+
+.task-check:checked {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.task-check:checked::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 6px;
+  height: 10px;
+  border: 2px solid #fff;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+}
+
+/* Task body */
+.task-body { flex: 1; min-width: 0; }
+
+.task-text {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text);
+  word-break: break-word;
+  transition: color var(--transition);
+  cursor: pointer;
+}
+
+.done .task-text {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.task-date {
+  font-size: 0.72rem;
+  color: var(--text-light);
+  margin-top: 4px;
+}
+
+/* Task action buttons */
+.task-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+.icon-btn {
+  width: 30px;
+  height: 30px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  transition: all var(--transition);
+  color: var(--text-muted);
+}
+
+.icon-btn.edit-btn:hover {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.icon-btn.delete-btn:hover {
+  background: var(--danger-light);
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.icon-btn.save-btn {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+.icon-btn.save-btn:hover { background: var(--primary-hover); }
+
+
+/* ============================================================
+   10. INLINE EDIT INPUT
+   ============================================================ */
+.edit-input {
+  width: 100%;
+  border: 1.5px solid var(--primary);
+  border-radius: var(--radius-sm);
+  padding: 5px 10px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text);
+  background: var(--surface2);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+}
+
+html.dark .edit-input {
+  box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.15);
+}
+
+
+/* ============================================================
+   11. CONFIRM DIALOG
+   ============================================================ */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(3px);
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.overlay.show { display: flex; }
+
+.dialog {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px 28px 20px;
+  max-width: 360px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  animation: popIn 0.18s ease;
+}
+
+.dialog h3 { font-size: 1.05rem; margin-bottom: 8px; }
+
+.dialog p {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+.dialog-btns {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.btn-cancel {
+  padding: 9px 18px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  background: var(--surface2);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.btn-cancel:hover {
+  border-color: var(--text-muted);
+  color: var(--text);
+}
+
+.btn-confirm {
+  padding: 9px 18px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: var(--danger);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.btn-confirm:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+}
+
+
+/* ============================================================
+   12. ANIMATIONS
+   ============================================================ */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes popIn {
+  from { transform: scale(0.94); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+
+
+/* ============================================================
+   13. RESPONSIVE (Mobile ≤ 480px)
+   ============================================================ */
+@media (max-width: 480px) {
+  header { padding: 0 16px; }
+  .logo  { font-size: 1.1rem; }
+
+  main { padding: 20px 12px 48px; }
+
+  .stats  { gap: 8px; }
+  .stat-card { padding: 12px 8px; }
+  .stat-num  { font-size: 1.4rem; }
+
+  .input-row     { flex-direction: column; }
+  #addBtn        { width: 100%; }
+
+  .toolbar       { flex-direction: column; align-items: flex-start; }
+  .filter-group  { flex-wrap: wrap; }
+}
