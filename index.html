@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="TaskFlow — A modern, professional To-Do App with Local Storage, dark mode, filtering, and inline editing." />
+  <title>TaskFlow — To-Do App</title>
+
+  <!-- External stylesheet -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header>
+    <div class="logo">Task<span>Flow</span></div>
+    <button id="themeToggle">
+      <span class="theme-icon">&#9790;</span>
+      <span id="themeLabel">Dark Mode</span>
+    </button>
+  </header>
+
+  <!-- ===== MAIN ===== -->
+  <main>
+
+    <!-- STATS -->
+    <div class="stats">
+      <div class="stat-card total">
+        <div class="stat-num" id="statTotal">0</div>
+        <div class="stat-label">Total</div>
+      </div>
+      <div class="stat-card completed">
+        <div class="stat-num" id="statDone">0</div>
+        <div class="stat-label">Completed</div>
+      </div>
+      <div class="stat-card remaining">
+        <div class="stat-num" id="statLeft">0</div>
+        <div class="stat-label">Remaining</div>
+      </div>
+    </div>
+
+    <!-- INPUT CARD -->
+    <div class="input-card">
+      <div class="input-row">
+        <input id="taskInput" type="text"
+               placeholder="Add a new task and press Enter or click Add..."
+               maxlength="200" />
+        <button id="addBtn">+ Add Task</button>
+      </div>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <div class="filter-group">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="active">Active</button>
+        <button class="filter-btn" data-filter="completed">Completed</button>
+      </div>
+      <button id="clearAllBtn">Clear All</button>
+    </div>
+
+    <!-- TASK LIST -->
+    <div id="taskList"></div>
+
+  </main>
+
+  <!-- ===== CONFIRM DIALOG ===== -->
+  <div class="overlay" id="overlay">
+    <div class="dialog">
+      <h3 id="dialogTitle">Confirm Delete</h3>
+      <p id="dialogMsg">Are you sure you want to delete this task?</p>
+      <div class="dialog-btns">
+        <button class="btn-cancel" id="dialogCancel">Cancel</button>
+        <button class="btn-confirm" id="dialogConfirm">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- External JavaScript (deferred so DOM is ready) -->
+  <script src="js/script.js" defer></script>
+
+</body>
+</html>
